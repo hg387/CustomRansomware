@@ -1,0 +1,2 @@
+This is a test document to check to see if TEST encryption code works on all kinds of symbols.
+/!@#$%^&*()-[]
