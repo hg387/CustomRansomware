@@ -1,9 +1,18 @@
 #!/usr/bin/python
-import tempfile
-import os, sys, random
+import tempfile, argparse
+import os, sys, random, hashlib
 from pathlib import *
-from encrypt import encrypt_line
-from decrypt import decrypt_line
+from encrypt import encrypt_line, save_key
+from decrypt import decrypt_line, find_key
+
+def hash(text):
+    result = hashlib.sha256(text.encode())
+
+    # Only achieved if the correct private key entered
+    if result == "":
+        return True
+    else:
+        return False
 
 def walk(input_path, key, action):
     p = Path(input_path)
@@ -28,9 +37,26 @@ def walk(input_path, key, action):
                             f.write(line)
 
                     t.close()
+
+                    # saving the key in .key file
+                    save_key(key)
                 except IOError as e:
                     print(str(file) + ": raises exception\n" + e)
 
 if __name__ == "__main__":
-    key = random.randint(0,127)
-    walk('.', key, True)
+
+    parser = argparse.ArgumentParser(description="Enter the private key:")
+    parser.add_argument('-d', action="store_false", dest='decrypt', default=False)
+    results = parser.parse_args()
+
+    if (results.decrypt):
+        key = find_key('.')
+        walk('.', key, False)
+    else:
+        key = random.randint(1, 127)
+        walk('.', key, True)
+
+
+
+
+

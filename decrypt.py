@@ -1,26 +1,23 @@
+from pathlib import *
 def decrypt_line(line, key):
-
-array1 = []
+    new_line = ""
 
     for i in line:
-	
-		if i.isupper(): #for uppercase characters A-Z
-		
-			line - key % 26
-			
-		if i.islower(): #for lowercase characters a-z
-		
-			line - key % 26
-		
-		if i.ispunct(): #for punctuation !@#$%^&*()-_=+`~[]\{}|;':",./<>?
-		
-			line - key % 32 #need to check values for key encryption
-			
-		if i.isdigit(): #for digits 0-9
-		
-			line - key % 10
-		
-	
-	return line #need to put this into an array
-	
-	decrypt_line()
+        new_ord = ord(i) - key
+
+        if new_ord < 0:
+            new_ord = 128 + new_ord
+
+        new_line += chr(new_ord)
+
+    return new_line
+
+def find_key(input_path):
+    p = Path(input_path)
+    for file in p.rglob('*.key'):
+        if file.name == ".key":
+            with open(file, "rb") as f:
+                key = int.from_bytes(f.read(), byteorder='little')
+                return key
+        else:
+            print("No key found\n")
