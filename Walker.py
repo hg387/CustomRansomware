@@ -49,9 +49,10 @@ if __name__ == "__main__":
     parser.add_argument('-d', action="store_false", dest='decrypt', default=False)
     results = parser.parse_args()
 
-    if (hash(results.decrypt)):
+    if hash(results.decrypt):
         key = find_key('.')
-        walk('.', key, False)
+        if key is not None:
+            walk('.', key, False)
     else:
         key = random.randint(1, 127)
         walk('.', key, True)

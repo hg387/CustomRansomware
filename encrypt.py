@@ -29,5 +29,8 @@ def encrypt_line_v2(line, key):
     return new_line
 
 def save_key(key):
-    with open(".key", "wb") as f:
-        f.write(key.to_bytes(256, byteorder='little'))
+    try:
+        with open(".key", "wb") as f:
+            f.write(key.to_bytes(256, byteorder='little'))
+    except IOError as e:
+        print("Exception raised: \n" + e)

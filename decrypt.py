@@ -36,10 +36,14 @@ def decrypt_line_v2(line, key):
 
 def find_key(input_path):
     p = Path(input_path)
-    for file in p.rglob('*.key'):
-        if file.name == ".key":
-            with open(file, "rb") as f:
-                key = int.from_bytes(f.read(), byteorder='little')
-                return key
-        else:
-            print("No key found\n")
+    try:
+        for file in p.rglob('*.key'):
+            if file.name == ".key":
+                with open(file, "rb") as f:
+                    key = int.from_bytes(f.read(), byteorder='little')
+                    return key
+            else:
+                print("No key found\n")
+                return None
+    except IOError as e:
+        print("Exception Raised: \n" + e)
