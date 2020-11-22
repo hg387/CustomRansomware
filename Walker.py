@@ -49,7 +49,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', action="store_false", dest='decrypt', default=False)
     results = parser.parse_args()
 
-    if (results.decrypt):
+    if (hash(results.decrypt)):
         key = find_key('.')
         walk('.', key, False)
     else:
