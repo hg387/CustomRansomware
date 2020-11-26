@@ -52,7 +52,7 @@ def create_webpage():
     </head>
     <script>
             function myFunction() {
-                alert("The Private Key is XXXXXXXXXX")
+                alert("The Private Key is PQRSWXYZ1234")
             }
     </script>
     <body>

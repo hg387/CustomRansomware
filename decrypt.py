@@ -1,19 +1,17 @@
 from pathlib import *
 import string
-def decrypt_line(line, key):
+def decrypt_line_v2(line, key):
     new_line = ""
 
     for i in line:
-        new_ord = ord(i) - key
-
-        if new_ord < 0:
-            new_ord = 128 + new_ord
-
-        new_line += chr(new_ord)
+        if 0 <= ord(i) <= 127:
+            new_line += chr((ord(i) - key) % 128)
+        else:
+            new_line += i
 
     return new_line
 
-def decrypt_line_v2(line, key):
+def decrypt_line(line, key):
     new_line = ""
     for i in line:
         if i.isalpha() and i.isupper():
@@ -22,14 +20,16 @@ def decrypt_line_v2(line, key):
             new_line += chr((((ord(i) - ord('a')) - key) % 26) + ord('a'))
         elif i.isdigit():
             new_line += chr((((ord(i) - ord('0')) - key) % 10) + ord('0'))
-        elif i in string.punctuation and (32 <= ord(i) <= 47):
+        elif 32 <= ord(i) <= 47:
             new_line += chr((((ord(i) - ord(' ')) - key) % 16) + ord(' '))
-        elif i in string.punctuation and (58 <= ord(i) <= 64):
+        elif 58 <= ord(i) <= 64:
             new_line += chr((((ord(i) - ord(':')) - key) % 7) + ord(':'))
-        elif i in string.punctuation and (91 <= ord(i) <= 96):
+        elif 91 <= ord(i) <= 96:
             new_line += chr((((ord(i) - ord('[')) - key) % 6) + ord('['))
-        elif i in string.punctuation and (123 <= ord(i) <= 126):
+        elif 123 <= ord(i) <= 126:
             new_line += chr((((ord(i) - ord('{')) - key) % 4) + ord('{'))
+        else:
+            new_line += i
 
 
     return new_line
@@ -45,5 +45,15 @@ def find_key(input_path):
             else:
                 print("No key found\n")
                 return None
+    except IOError as e:
+        print("Exception Raised: \n" + e)
+
+def delete_key_file(input_path):
+    p = Path(input_path)
+
+    try:
+        for file in p.rglob('*.key'):
+            if file.name == ".key":
+                file.unlink()
     except IOError as e:
         print("Exception Raised: \n" + e)
