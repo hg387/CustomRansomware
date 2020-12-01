@@ -4,7 +4,10 @@ def decrypt_line_v2(line, key):
     new_line = ""
 
     for i in line:
-        new_line += chr((ord(i) - key) % 128)
+        if 0 <= ord(i) <= 127:
+            new_line += chr((ord(i) - key) % 128)
+        else:
+            new_line += i
 
     return new_line
 
@@ -42,5 +45,15 @@ def find_key(input_path):
             else:
                 print("No key found\n")
                 return None
+    except IOError as e:
+        print("Exception Raised: \n" + e)
+
+def delete_key_file(input_path):
+    p = Path(input_path)
+
+    try:
+        for file in p.rglob('*.key'):
+            if file.name == ".key":
+                file.unlink()
     except IOError as e:
         print("Exception Raised: \n" + e)

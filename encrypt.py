@@ -3,7 +3,10 @@ import string
 def encrypt_line_v2(line, key):
     new_line = ""
     for i in line:
-        new_line += chr((ord(i) + key) % 128)
+        if 0 <= ord(i) <= 127:
+            new_line += chr((ord(i) + key) % 128)
+        else:
+            new_line += i
 
     return new_line
 
